@@ -87,24 +87,40 @@ class Versus:
             x, y = self.search_place()
             # print((x, y))
             self.put_stone_vs(x, y, current)
-            if not self.put_stone_vs(x, y, current):
+            if self.put_stone_vs(x, y, current):
+                print(f"{(x+1, y+1)}に石を置きました。")
+            elif not self.put_stone_vs(x, y, current):
                 if (x, y) == (8, 8):
+                    print("CPUはパスしました。")
                     self.pass_turn_vs()
                 elif (x, y) == (-1, -1):
+                    print("CPUは降参しました。")
                     self.versus_set()
+                else:
+                    print(f"{(x+1, y+1)}に置けませんでした。置き直します。")
+                    self.cpu_turn(current)
         else:
+            print("CPUはパスしました。")
             self.pass_turn_vs()
 
     def pl_turn(self, current):
         if board.check_put_place(current):
             (x, y) = game.input_stone()
             self.put_stone_vs(x, y, current)
-            if not self.put_stone_vs(x, y, current):
+            if self.put_stone_vs(x, y, current):
+                print(f"{(x+1, y+1)}に石を置きました。")
+            elif not self.put_stone_vs(x, y, current):
                 if (x, y) == (8, 8):
+                    print("パスしました。")
                     self.pass_turn_vs()
                 elif (x, y) == (-1, -1):
+                    print("降参しました。")
                     self.versus_set()
+                else:
+                    print(f"{(x+1, y+1)}に置けませんでした。置き直してください。")
+                    self.pl_turn(current)
         else:
+            print("パスしました。")
             self.pass_turn_vs()
 
     def one_cycle(self, first):
@@ -154,6 +170,11 @@ class Versus:
         self.player_turn(first)
         board.display()
         while self.blank_count > 0 or self.black_count != 0 or self.white_count != 0:
-            print('---'*10)
-            self.one_cycle(first)
-        self.versus_set()
+            self.count()
+            if self.black_count == 0 or self.white_count == 0:
+                self.versus_set()
+            elif self.blank_count == 0:
+                self.versus_set()
+            else:
+                print('---'*10)
+                self.one_cycle(first)

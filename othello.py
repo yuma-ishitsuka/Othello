@@ -47,6 +47,8 @@ class Board:
             x += dx
             y += dy
             length += 1
+            if not self.rangecheck(x+dx, y+dy):
+                return False
             if self.cell[x+dx][y+dy] == current:
                 return length
         else:
