@@ -10,19 +10,17 @@ class Game:
         self.black_count = 2
         self.blank_count = 60
 
-    def input_stone(self):
+    def input_stone(self, current):
         print("石を置く場所を1~8で入力してください。パス：(9, 9)、終了：(0, 0)")
         print("xが縦、yが横の座標です。")
         print("左上が(1, 1)、右下が(8, 8)です。")
-        x = int(input("x >> "))
-        y = int(input("y >> "))
-        
         try:
-            x -= 1
-            y -= 1
+            x = int(input("x >> "))
+            y = int(input("y >> "))
+            return x-1, y-1
         except:
-            self.input_stone()
-        return x, y
+            print("入力が間違っています。")
+            return self.input_stone(current)
     
     def pass_turn(self):
         board.pass_count += 1
@@ -51,7 +49,7 @@ class Game:
 
     def one_turn(self):
         if board.check_put_place(board.current):
-            (x, y) = self.input_stone()
+            (x, y) = self.input_stone(board.current)
             board.put_stone(x, y, board.current)
             if not board.put_stone(x, y, board.current):
                 if (x, y) == (8, 8):

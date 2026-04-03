@@ -100,7 +100,7 @@ class Versus:
 
     def pl_turn(self, current):
         if board.check_put_place(current):
-            (x, y) = game.input_stone()
+            (x, y) = game.input_stone(current)
             self.put_stone_vs(x, y, current)
             if not self.put_stone_vs(x, y, current):
                 if (x, y) == (8, 8):
@@ -153,10 +153,14 @@ class Versus:
         sys.exit()
 
     def versus(self):
-        first = int(input("先攻なら0、後攻なら1を入力してください。"))
-        if not (first == 0 or first == 1):
-            print("もう一度入力してください。")
-            self.versus()
+        try:
+            first = int(input("先攻なら0、後攻なら1を入力してください。>> "))
+        except:
+            print("入力が間違っています。")
+            return self.versus()
+        if not first == 0 or first == 1:
+            print("0または1を入力してください、")
+            return self.versus()
         self.player_turn(first)
         board.display()
         while self.blank_count > 0 or self.black_count != 0 or self.white_count != 0:
@@ -164,6 +168,8 @@ class Versus:
             if self.black_count == 0 or self.white_count == 0:
                 self.versus_set()
             elif self.blank_count == 0:
+                self.versus_set()
+            elif board.pass_count == 2:
                 self.versus_set()
             else:
                 print('---'*10)

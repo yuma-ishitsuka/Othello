@@ -3,14 +3,18 @@ from game import Game
 from versus import Versus
 
 def modechange():
-    mode = int(input("一人遊びは1、CPU対戦は2を入力してください。>> :"))
-    if mode == 1:
+    try:
+        mode = int(input("一人遊びは0、CPU対戦は1を入力してください。>> "))
+    except:
+        print("入力が間違っています。")
+        return modechange()
+    if mode == 0:
         game.gameplay()
-    elif mode == 2:
+    elif mode == 1:
         versus.versus()
     else:
-        print("入力が正しくありません。もう一度入力してください。")
-        modechange()
+        print("0または1を入力してください。")
+        return modechange()
 
 
 if __name__ == "__main__":
