@@ -4,11 +4,6 @@ from othello import Board
 
 board = Board()
 
-WHITE = 1
-BLACK = -1
-BLANK = 0
-BOARD_SIZE = 8
-
 class Game:
     def __init__(self):
         self.white_count = 2
@@ -17,7 +12,7 @@ class Game:
 
     def input_stone(self):
         print("石を置く場所を1~8で入力してください。パス：(9, 9)、終了：(0, 0)")
-        print("xが横、yが縦の座標です。")
+        print("xが縦、yが横の座標です。")
         print("左上が(1, 1)、右下が(8, 8)です。")
         x = int(input("x >> "))
         y = int(input("y >> "))
@@ -50,15 +45,15 @@ class Game:
         sys.exit()
 
     def count_sys(self):
-        self.white_count = np.sum(board.cell == WHITE)
-        self.black_count = np.sum(board.cell == BLACK)
-        self.blank_count = np.sum(board.cell == BLANK)
+        self.white_count = np.sum(board.cell == board.WHITE)
+        self.black_count = np.sum(board.cell == board.BLACK)
+        self.blank_count = np.sum(board.cell == board.BLANK)
 
     def one_turn(self):
-        if board.check_put_place():
+        if board.check_put_place(board.current):
             (x, y) = self.input_stone()
-            board.put_stone(x, y)
-            if not board.put_stone(x, y):
+            board.put_stone(x, y, board.current)
+            if not board.put_stone(x, y, board.current):
                 if (x, y) == (8, 8):
                     self.pass_turn()
                 elif (x, y) == (-1, -1):
