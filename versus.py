@@ -86,14 +86,18 @@ class Versus:
         if board.check_put_place(current):
             x, y = self.search_place()
             # print((x, y))
-            self.put_stone_vs(x, y, current)
-            if not self.put_stone_vs(x, y, current):
+            if not board.check_can_put(x, y, current):
                 if (x, y) == (8, 8):
                     print("CPUはパスしました。")
                     self.pass_turn_vs()
                 elif (x, y) == (-1, -1):
                     print("CPUは降参しました。")
                     self.versus_set()
+                else:
+                    print(f"{(x+1, y+1)}には置けませんでした。置き直します。")
+                    return self.cpu_turn(current)
+            else:
+                self.put_stone_vs(x, y, current)
         else:
             print("CPUはパスしました。")
             self.pass_turn_vs()
@@ -101,14 +105,18 @@ class Versus:
     def pl_turn(self, current):
         if board.check_put_place(current):
             (x, y) = game.input_stone(current)
-            self.put_stone_vs(x, y, current)
-            if not self.put_stone_vs(x, y, current):
+            if not board.check_can_put(x, y, current):
                 if (x, y) == (8, 8):
                     print("パスしました。")
                     self.pass_turn_vs()
                 elif (x, y) == (-1, -1):
                     print("降参しました。")
                     self.versus_set()
+                else:
+                    print(f"{(x+1, y+1)}には置けませんでした。置き直してください。")
+                    return self.pl_turn(current)
+            else:
+                self.put_stone_vs(x, y, current)
         else:
             print("パスしました。")
             self.pass_turn_vs()
@@ -158,7 +166,7 @@ class Versus:
         except:
             print("入力が間違っています。")
             return self.versus()
-        if not first == 0 or first == 1:
+        if not (first == 0 or first == 1):
             print("0または1を入力してください、")
             return self.versus()
         self.player_turn(first)
