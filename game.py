@@ -24,12 +24,12 @@ class Game:
     
     def pass_turn(self):
         board.pass_count += 1
-        board.turnchange()
+        board.turn_change()
         if board.pass_count == 2:
-            self.gameset()
+            self.game_set()
         return True
     
-    def gameset(self):
+    def game_set(self):
         print("ゲーム終了")
         self.count_sys()
         print("白の石：", self.white_count)
@@ -50,12 +50,18 @@ class Game:
     def one_turn(self):
         if board.check_put_place(board.current):
             (x, y) = self.input_stone(board.current)
-            board.put_stone(x, y, board.current)
-            if not board.put_stone(x, y, board.current):
+            if not board.check_can_put(x, y, board.current):
                 if (x, y) == (8, 8):
+                    print("パスしました。")
                     self.pass_turn()
                 elif (x, y) == (-1, -1):
-                    self.gameset()
+                    print("終了しました。")
+                    self.game_set()
+                else:
+                    print(f"{(x+1,y+1)}には置けません。置き直してください。")
+                    return self.one_turn()
+            else:
+                board.put_stone(x, y, board.current)
         else:
             self.pass_turn()
 
@@ -70,4 +76,4 @@ class Game:
                 print(", 白のターン")
             board.turn += 1
             self.one_turn()
-        self.gameset()
+        self.game_set()

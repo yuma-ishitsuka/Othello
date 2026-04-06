@@ -74,13 +74,10 @@ class Versus:
         return True
         
     def put_stone_vs(self, x, y, current):
-        if board.check_can_put(x, y, current):
-            board.pass_count = 0
-            board.cell[x][y] = current
-            board.reverse_stone(x, y, current)
-            return True
-        else:
-            return False
+        board.pass_count = 0
+        board.cell[x][y] = current
+        board.reverse_stone(x, y, current)
+
     
     def cpu_turn(self, current):
         if board.check_put_place(current):

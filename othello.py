@@ -17,11 +17,11 @@ class Board:
         self.turn = 1
 
     # ターンチェンジ
-    def turnchange(self):
+    def turn_change(self):
         self.current *= -1
     
     # その座標が範囲内かチェック
-    def rangecheck(self, x, y):
+    def range_check(self, x, y):
         if x == None: x = -1
         if y == None: y = -1
         if x < 0 or self.BOARD_SIZE <= x or y < 0 or self.BOARD_SIZE <= y:
@@ -30,7 +30,7 @@ class Board:
     
     # その場所に置けるかどうかチェック
     def check_can_put(self, x, y, current):
-        if not self.rangecheck(x, y):
+        if not self.range_check(x, y):
             return False
         if not self.cell[x][y] == self.BLANK:
             return False
@@ -40,14 +40,14 @@ class Board:
 
     # (dx, dy)方向にひっくり返せる石があるかどうか
     def can_reverse(self, dx, dy, x, y, current):
-        if not self.rangecheck(x+dx, y+dy):
+        if not self.range_check(x+dx, y+dy):
             return False
         length = 0
         while self.cell[x+dx][y+dy] == -current:
             x += dx
             y += dy
             length += 1
-            if not self.rangecheck(x+dx, y+dy):
+            if not self.range_check(x+dx, y+dy):
                 return False
             if self.cell[x+dx][y+dy] == current:
                 return length
@@ -59,7 +59,7 @@ class Board:
             for dx in self.DIRECTION_LIST:
                 if dx == dy == 0:
                     continue
-                elif not self.rangecheck(x+dx, y+dy):
+                elif not self.range_check(x+dx, y+dy):
                     continue
                 elif not self.can_reverse(dx, dy, x, y, current):
                     continue
@@ -91,14 +91,11 @@ class Board:
         print("\n", end=" ")
 
     def put_stone(self, x, y, current):
-        if self.check_can_put(x, y, current):
-            self.pass_count = 0
-            self.cell[x][y] = current
-            self.reverse_stone(x, y, current)
-            self.turnchange()
-            return True
-        else:
-            return False
+        self.pass_count = 0
+        self.cell[x][y] = current
+        self.reverse_stone(x, y, current)
+        self.turn_change()
+        
         
     def check_put_place(self, current):
         for x in range(self.BOARD_SIZE):
